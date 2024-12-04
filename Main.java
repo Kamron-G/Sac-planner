@@ -1,3 +1,4 @@
+package Main;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -87,12 +88,15 @@ public class Main {
                         System.out.println("\n--- Add Classes ---");
                         System.out.println("1. Add a class");
                         System.out.println("2. Finish semester");
+                        System.out.println("If all required classes are done press 3 to earn degree");
                         System.out.print("Choose an option: ");
                         int subChoice = scanner.nextInt();
                         scanner.nextLine(); // Consume newline
 
                         switch (subChoice) {
                             case 1:
+                            	System.out.println("Required classes left for degree");
+                            	degree.listRequiredClasses();
                                 System.out.print("Enter the class name: ");
                                 String className = scanner.nextLine();
                                 System.out.print("Enter your grade for " + className + " (0-100): ");
@@ -108,41 +112,49 @@ public class Main {
                                             System.out.println("You passed " + requiredClass.getClassName() + "!");
                                             degree.requiredClasses.remove(i);
                                         }
-                                        break;
+                                        else {
+                                        	 System.out.println("You failed " + requiredClass.getClassName() + "!" + "retake the class in order to get degree");                                        	 
+                                        }
+                                       
+                                        break;	                                       
                                     }
                                 }
+                                
                                 break;
 
                             case 2:
                                 System.out.println("Finished entering classes for semester " + semesterName + ".");
                                 semesters.add(semester);
                                 addingClasses = false;
+                                
+                                System.out.println("\n--- GPA Display ---");
+                                for (Semester sem : semesters) {
+                                    System.out.println("GPA for " + sem.semesterName + ": " + sem.GPA());
+                                }                              
                                 break;
-
-                            default:
-                                System.out.println("Invalid choice. Try again.");
+                                
+                            case 3:
+                            	 if(degree.requiredClasses.size() > 0) {
+                            		System.out.println("you still have the required classes left");
+                            		degree.listRequiredClasses();                            	
+                                 	running = true;
+                                 }
+                                 else if(degree.requiredClasses.isEmpty()){
+                                 	System.out.println("\nCongratulations " + user.getUserName() + "!" + " you have recieved your degree");
+                                 	addingClasses = false;
+                                     running = false;
+                                 }   
+                            	break;
                         }
+                        
+                        
                     }
-                    break;
-
-                case 4:
-                    System.out.println("\n--- GPA Display ---");
-                    for (Semester sem : semesters) {
-                        System.out.println("GPA for " + sem.semesterName + ": " + sem.GPA());
-                    }
-                    break;
-
-                case 5:
-                    System.out.println("\nGoodbye, " + user.getUserName() + "!");
-                    running = false;
-                    break;
-
-                default:
-                    System.out.println("Invalid choice. Please try again.");
+                   
+                    
+                    break;               
             }
         }
 
         scanner.close();
     }
 }
-
